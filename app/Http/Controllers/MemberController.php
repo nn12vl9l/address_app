@@ -14,8 +14,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        // $members = Member::all();
-        return view('members.index');
+        $members = Member::all();
+        return view('members.index', compact('members'));
     }
 
     /**
@@ -25,7 +25,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return view('members.create');
     }
 
     /**
