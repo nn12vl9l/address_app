@@ -5,14 +5,13 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     連絡先一覧
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table" style="mx-auto;">
                         <tr class="table-info">
-                            <th scope="col" width="10%">#</th>
+                            <th scope="col" width="15%">#</th>
                             <th scope="col" width="20%">名前</th>
-                            <th scope="col" width="30%">Email</th>
-                            <th scope="col" width="25%">TEL</th>
+                            <th scope="col" width="30%">画像</th>
                             <th scope="col" width="15%">OPTION</th>
                         </tr>
 
@@ -20,8 +19,7 @@
                             <tr>
                                 <th scope="row">{{ $member->id }}</th>
                                 <td>{{ $member->name }}</td>
-                                <td>{{ $member->email }}</td>
-                                <td>{{ $member->tel }}</td>
+                                <td>{{ $member->image }}</td>
                                 <td><a href="{{ route('members.show', $member) }}">
                                         <button type="button" class="btn btn-success">詳細</button>
                                     </a></td>
