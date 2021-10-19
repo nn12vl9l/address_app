@@ -10,6 +10,12 @@ class Member extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'tel',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -17,7 +23,7 @@ class Member extends Model
 
     public function image()
     {
-        return $this->belongsTo(Image::class);
+        return $this->hasOne(Image::class);
     }
 
     public function getImagePathAttribute()

@@ -23,7 +23,6 @@ class CreateMembersTable extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
-
         });
     }
 

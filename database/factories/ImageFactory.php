@@ -24,8 +24,8 @@ class ImageFactory extends Factory
     public function definition()
     {
 
-        $width = 300;
-        $height = 400;
+        $width = 100;
+        $height = 120;
 
         $file = $this->faker->image(null, $width, $height);
         $path = Storage::putFile('members', $file);

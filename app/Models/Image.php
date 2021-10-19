@@ -9,8 +9,9 @@ class Image extends Model
 {
     use HasFactory;
 
-    public function members()
-    {
-        return $this->hasMany(Member::class);
-    }
+    protected $fillable = [
+        'member_id',
+        'photo_name',
+        'name'
+    ];
 }

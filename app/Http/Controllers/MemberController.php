@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\MemberRequest;
 use App\Models\Member;
+use App\Models\Image;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
@@ -31,12 +35,41 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\MemberRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MemberRequest $request)
     {
-        
+        $member = new Member($request->all());
+        $member->user_id = $request->user()->id;
+        $file = $request->file('file');
+
+        DB::beginTransaction();
+
+        try {
+            $member->save();
+
+            if (!$path = Storage::putFile('members', $file)) {
+                throw new Exception('ファイルの保存に失敗しました');
+            }
+
+            $image = new Image([
+                'member_id' => $member->id,
+                'photo_name' => $file->getClientOriginalName(),
+                'name' => basename($path)
+            ]);
+
+            $image->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            if (!empty($path)) {
+                Storage::delete($path);
+            }
+            DB::rollback();
+            return back()->withErrors([$e->getMessage()]);
+        }
+        return redirect(route('members.index'))->with(['flash_message' => '登録が完了しました']);
     }
 
     /**
@@ -56,21 +89,30 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Member $member)
     {
-        //
+        return view('members.edit', compact('member'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\MemberRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MemberRequest $request, Member $member)
     {
-        //
+        $member->fill($request->all());
+
+        try {
+            $member->save();
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+
+        return redirect()->route('members.index')
+        ->with(['flash_message' => '更新が完了しました']);
     }
 
     /**
@@ -79,8 +121,24 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Member $member)
     {
-        //
+        $path = $member->image_path;
+
+        DB::beginTransaction();
+
+        try {
+            $member->delete();
+            $member->image()->delete();
+            if (!Storage::delete($path)) {
+                throw new \Exception('ファイルの削除に失敗しました');
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withErrors($e->getMessage());
+        }
+        return redirect()->route('members.index')
+        ->with(['flash_message' => '投稿を削除しました']);
     }
 }
