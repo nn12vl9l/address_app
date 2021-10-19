@@ -1,18 +1,10 @@
-<x-app-layout>
-    <div class="container lg:w-3/5 md:w-4/5 w-11/12 mx-auto mt-8 px-8 bg-white shadow-md">
-        <h2 class="text-center text-lg font-bold pt-6 tracking-widest">新規登録</h2>
-        @if ($errors->any())
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mx-8 my-2" role="alert">
-                <p>
-                    <b>{{ count($errors) }}件のエラーがあります。</b>
-                </p>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+@extends('layouts.main')
+@section('title', '新規登録')
+@section('content')
+    <div class="col-8 col-offset-2 mx-auto">
+        @include('partial.flash')
+        @include('partial.errors')
+
         <form action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data"
             class="rounded pt-3 pb-8 mb-4">
             @csrf
@@ -50,4 +42,5 @@
                 </div>
         </form>
     </div>
-</x-app-layout>
+@endsection
+

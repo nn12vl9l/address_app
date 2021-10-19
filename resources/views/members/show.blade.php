@@ -1,21 +1,10 @@
-<x-app-layout>
-    <div class="container lg:w-3/5 md:w-4/5 w-11/12 mx-auto mt-8 px-8 bg-white shadow-md">
-        <h2 class="text-center text-lg font-bold pt-6 tracking-widest">詳細画面</h2>
-
-        @if ($errors->any())
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mx-8 my-2" role="alert">
-                <p>
-                    <b>{{ count($errors) }}件のエラーがあります。</b>
-                </p>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <section class="card shadow position-relative">
+@extends('layouts.main')
+@section('title', '詳細画面')
+@section('content')
+    @include('partial.flash')
+    @include('partial.errors')
+    <section>
+        <article class="card shadow position-relative">
             <figure class="m-6">
                 <div class="row">
                     <div class="col-6">
@@ -50,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-    </div>
-    </figure>
+            </figure>
     </section>
-</x-app-layout>
+@endsection
