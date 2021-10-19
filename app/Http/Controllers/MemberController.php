@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Member::class, 'member');
+    }
     /**
      * Display a listing of the resource.
      *

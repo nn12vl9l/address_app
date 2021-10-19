@@ -24,9 +24,9 @@ class MemberRequest extends FormRequest
     public function rules()
     {
         $rule = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
-            'tel' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
+            'email' => 'required|string|max:50',
+            'tel' => 'required|string|max:11',
         ];
 
         $route = $this->route()->getName();

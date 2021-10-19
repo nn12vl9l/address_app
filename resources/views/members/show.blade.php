@@ -35,22 +35,22 @@
                         </figcaption>
 
                         <div class="flex flex-row text-center my-4 mt-8 px-8">
-                            {{-- @can('update', $member) --}}
+                            @can('update', $member)
                             <a href="{{ route('members.edit', $member) }}" class="btn btn-primary btn-lg mr-2">編集</a>
-                            {{-- @endcan
-                                @can('delete', $member) --}}
-                                <form action="{{ route('members.destroy', $member) }}" method="post" id="form">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                                <input form="form" type="submit" value="削除"
+                            @endcan
+                                @can('delete', $member)
+                            <form action="{{ route('members.destroy', $member) }}" method="post" id="form">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                            <input form="form" type="submit" value="削除"
                                 onclick="if(!confirm('削除していいですか')){return false}" class="btn btn-danger btn-lg mr-2">
-                                {{-- @endcan --}}
-                                <a href="{{ route('members.index') }}" class="btn btn-secondary btn-lg ">戻る</a>
-                            </div>
+                            @endcan
+                            <a href="{{ route('members.index') }}" class="btn btn-secondary btn-lg ">戻る</a>
                         </div>
                     </div>
-
-                </figure>
-        </section>
+                </div>
+    </div>
+    </figure>
+    </section>
 </x-app-layout>

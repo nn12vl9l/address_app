@@ -38,7 +38,7 @@
                         <!-- Authentication -->
                         @auth
                             <x-dropdown-link :href="route('members.create')">
-                                {{ __('Create Post') }}
+                                {{ __('新規登録') }}
                             </x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -93,7 +93,7 @@
                 <div class="mt-3 space-y-1">
                     <!-- Authentication -->
                     <x-responsive-nav-link :href="route('members.create')">
-                        {{ __('Create Post') }}
+                        {{ __('新規登録') }}
                     </x-responsive-nav-link>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
