@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Member::class);
     }
+
+    public function identityProvider()
+    {
+        return $this->hasOne(IdentityProvider::class);
+    }
 }

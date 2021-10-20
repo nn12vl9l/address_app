@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Auth\OAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,14 @@ Route::resource('members', MemberController::class)
     ->only(['show', 'index']);
 
 require __DIR__ . '/auth.php';
+
+Route::prefix('auth')->middleware('guest')->group(function () {
+
+    Route::get('{provider}', [OAuthController::class, 'redirectToProvider'])
+        ->where('provider', 'github|google')
+        ->name('redirectToProvider');
+
+    Route::get('{prpvider}/callback', [OAuthController::class, 'oauthCallback'])
+        ->where('provider', 'github|google')
+        ->name('oauthCallback');
+});
