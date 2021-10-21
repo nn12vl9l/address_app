@@ -116,7 +116,7 @@ class MemberController extends Controller
         }
 
         return redirect()->route('members.index')
-        ->with(['flash_message' => '更新が完了しました']);
+            ->with(['flash_message' => '更新が完了しました']);
     }
 
     /**
@@ -143,6 +143,6 @@ class MemberController extends Controller
             return back()->withErrors($e->getMessage());
         }
         return redirect()->route('members.index')
-        ->with(['flash_message' => '投稿を削除しました']);
+            ->with(['flash_message' => '投稿を削除しました']);
     }
 }
