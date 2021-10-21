@@ -76,8 +76,10 @@ class MemberController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            if (!empty($path)) {
-                Storage::delete($path);
+            foreach($paths as $path) {
+                if (!empty($path)) {
+                    Storage::delete($path);
+                }
             }
             DB::rollback();
             return back()->withErrors([$e->getMessage()]);
