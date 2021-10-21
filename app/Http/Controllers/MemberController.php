@@ -46,24 +46,33 @@ class MemberController extends Controller
     {
         $member = new Member($request->all());
         $member->user_id = $request->user()->id;
-        $file = $request->file('file');
+        $files = $request->file;
 
         DB::beginTransaction();
 
         try {
             $member->save();
 
-            if (!$path = Storage::putFile('members', $file)) {
-                throw new Exception('ファイルの保存に失敗しました');
+            $paths = [];
+
+            foreach ($files as $file) {
+                $name = $file->getClientOriginalName();
+
+                $path = Storage::putFile('members', $file);
+                if (!$path) {
+                    throw new Exception('ファイルの保存に失敗しました');
+                }
+
+                $paths[] = $path;
+
+                $image = new Image([
+                    'member_id' => $member->id,
+                    'photo_name' => $name,
+                    'name' => basename($path)
+                ]);
+
+                $image->save();
             }
-
-            $image = new Image([
-                'member_id' => $member->id,
-                'photo_name' => $file->getClientOriginalName(),
-                'name' => basename($path)
-            ]);
-
-            $image->save();
 
             DB::commit();
         } catch (\Exception $e) {
@@ -127,16 +136,22 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        $path = $member->image_path;
-
         DB::beginTransaction();
 
         try {
-            $member->delete();
-            $member->image()->delete();
-            if (!Storage::delete($path)) {
-                throw new \Exception('ファイルの削除に失敗しました');
+            $paths = $member->image_paths;
+
+            foreach ($paths as $path) {
+                if (!Storage::delete($path)) {
+                    throw new \Exception('ファイルの削除に失敗しました');
+                }
             }
+
+            $image = Image::where('member_id', $member->id);
+
+            $image->delete();
+            $member->delete();
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

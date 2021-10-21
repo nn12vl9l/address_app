@@ -16,7 +16,7 @@
                 <tr>
                     <th scope="row">{{ $member->id }}</th>
                     <td>{{ $member->name }}</td>
-                    <td><img src="{{ $member->image_url }}" class="d-block mx-auto"></td>
+                    <td><img src="{{ $member->image_urls[0] }}" class="d-block mx-auto"></td>
                     <td><a href="{{ route('members.show', $member) }}">
                             <button type="button" class="btn btn-success">詳細</button>
                         </a></td>

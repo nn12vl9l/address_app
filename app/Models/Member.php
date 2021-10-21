@@ -21,21 +21,41 @@ class Member extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function image()
+    public function images()
     {
-        return $this->hasOne(Image::class);
+        return $this->hasMany(Image::class);
     }
 
     public function getImagePathAttribute()
     {
-        return 'members/' . $this->image->name;
+        return 'members/' . $this->image[0]->name;
     }
 
     public function getImageUrlAttribute()
     {
-        if (config('filesystems.default') == 'gcs'){
+        if (config('filesystems.default') == 'gcs') {
             return Storage::temporaryUrl($this->image_path, now()->addMinutes(5));
         }
         return Storage::url($this->image_path);
+    }
+
+    public function getImagePathsAttribute()
+    {
+        $images = $this->images;
+        $paths = [];
+        foreach ($images as $image) {
+            $paths[] = 'members/' . $image->name;
+        }
+        return $paths;
+    }
+
+    public function getImageUrlsAttribute()
+    {
+        $image_paths = $this->image_paths;
+        $urls = [];
+        foreach ($image_paths as $path) {
+            $urls[] = Storage::url($path);
+        }
+        return $urls;
     }
 }

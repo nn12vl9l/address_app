@@ -7,7 +7,9 @@
         <figure class="m-6">
             <div class="row">
                 <div class="col-6">
-                    <img src="{{ $member->image_url }}" width="100%">
+                    @foreach ($member->image_urls as $url)
+                        <img src="{{ $url }}" width="100%">
+                    @endforeach
                 </div>
                 <div class="col-6">
                     <figcaption>

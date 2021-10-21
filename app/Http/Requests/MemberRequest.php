@@ -31,7 +31,7 @@ class MemberRequest extends FormRequest
 
         $route = $this->route()->getName();
         if ($route === 'members.store') {
-            $rule['file'] = 'required|file|image';
+            $rule['file'] = 'required';
         }
 
         return $rule;
