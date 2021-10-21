@@ -9,6 +9,9 @@
 * イメージテーブル
 * https://docs.google.com/spreadsheets/d/1pNa9dof0b2egGNuAIWNjSBrpmvyXkLBybFSmUel4gg4/edit#gid=264027466
 
+###herokuデプロイ
+https://address-app-nn12vl9l.herokuapp.com/members
+
 ## SNS認証
 * gitHub
 * google
@@ -27,5 +30,6 @@
 
 ### Edit
 <img width="1440" alt="編集画面" src="https://user-images.githubusercontent.com/64241250/138209901-56986253-0ef5-4b76-9137-ebfd19fd5db9.png">
+
 
 
