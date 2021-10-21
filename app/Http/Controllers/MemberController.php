@@ -46,13 +46,13 @@ class MemberController extends Controller
     {
         $member = new Member($request->all());
         $member->user_id = $request->user()->id;
+
         $files = $request->file;
 
         DB::beginTransaction();
 
         try {
             $member->save();
-
             $paths = [];
 
             foreach ($files as $file) {
@@ -60,7 +60,7 @@ class MemberController extends Controller
 
                 $path = Storage::putFile('members', $file);
                 if (!$path) {
-                    throw new Exception('ファイルの保存に失敗しました');
+                    throw new \Exception('ファイルの保存に失敗しました');
                 }
 
                 $paths[] = $path;
@@ -76,11 +76,12 @@ class MemberController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            foreach($paths as $path) {
-                if (!empty($path)) {
+            if (!empty($paths)) {
+                foreach ($paths as $path) {
                     Storage::delete($path);
                 }
             }
+
             DB::rollback();
             return back()->withErrors([$e->getMessage()]);
         }
