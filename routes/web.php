@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Auth\OAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [MemberController::class, 'index'])
+    ->name('root');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::resource('members', MemberController::class)
+    ->middleware('auth')
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
+Route::resource('members', MemberController::class)
+    ->only(['show', 'index']);
+
+require __DIR__ . '/auth.php';
+
+Route::prefix('auth')->middleware('guest')->group(function () {
+
+    Route::get('{provider}', [OAuthController::class, 'redirectToProvider'])
+        ->where('provider', 'github|google')
+        ->name('redirectToProvider');
+
+    Route::get('{prpvider}/callback', [OAuthController::class, 'oauthCallback'])
+        ->where('provider', 'github|google')
+        ->name('oauthCallback');
 });
