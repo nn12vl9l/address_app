@@ -23,8 +23,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('members', MemberController::class)
-    ->only(['create', 'store', 'edit', 'update', 'destroy'])
-    ->middleware('auth');
+    ->middleware('auth')
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 Route::resource('members', MemberController::class)
     ->only(['show', 'index']);

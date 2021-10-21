@@ -20,22 +20,26 @@ class OAuthController extends Controller
 
     public function oauthCallback($provider)
     {
+        // dd('test');
         try {
             $socialUser = Socialite::with($provider)->user();
         } catch (\Exception $e) {
-            return redirect('/login')->withErrors(
-                ['oauth' => '予期せぬエラーが発生しました']
-            );
+            // dd($e);
+            return redirect('/login')->withErrors(['oauth' => '予期せぬエラーが発生しました']);
         }
+        // dd($socialUser);
+        $user = User::firstOrNew(['email' => $socialUser->getEmail()]);
 
-        $identityProvider = IdentityProvider::firstOrNew(['id' => $socialUser->getId(), 'name' => $provider]);
-
-        // 新規ユーザーの処理
-        if ($identityProvider->exists) {
-            $user = $identityProvider->user;
+        // ユーザーが認証済みか確認
+        if ($user->exists) {
+            if ($user->identityProvider->name != $provider) {
+                return redirect('/login')->withErrors(['oauth' => 'このメールアドレスはすでに別の認証で使われてます']);
+            }
         } else {
-            $user = new User([
-                'name' => $socialUser->getNickname() ?? $socialUser->name,
+            $user->name = $socialUser->getNickname() ?? $socialUser->name;
+            $identityProvider = new IdentityProvider([
+                'id' => $socialUser->getId(),
+                'name' => $provider
             ]);
 
             DB::beginTransaction();
@@ -44,15 +48,18 @@ class OAuthController extends Controller
                 $user->identityProvider()->save($identityProvider);
                 DB::commit();
             } catch (\Exception $e) {
-                DB::rollback();
+                DB::rollBack();
+                // dd($e);
                 return redirect()
                     ->route('login')
                     ->withErrors(['transaction_error' => '保存に失敗しました']);
             }
         }
 
+        // ログイン
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
     }
 }
+
