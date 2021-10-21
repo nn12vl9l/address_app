@@ -7,6 +7,7 @@
 * ユーザーテーブル
 * メンバーテーブル
 * イメージテーブル
+* https://docs.google.com/spreadsheets/d/1pNa9dof0b2egGNuAIWNjSBrpmvyXkLBybFSmUel4gg4/edit#gid=264027466
 
 ## SNS認証
 * gitHub
